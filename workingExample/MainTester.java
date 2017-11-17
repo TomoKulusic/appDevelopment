@@ -22,13 +22,14 @@ public class MainTester {
        
       if(args.length == 0){
          
-         Result result = JUnitCore.runClasses(EdgeTableTest.class);
-		
+         /*Result result = JUnitCore.runClasses(EdgeTableTest.class);
+      
          for (Failure failure : result.getFailures()) {
             System.out.println(failure.toString());
          }
-		
-         System.out.printf("Test ran: %s, Failed: %s%n",result.getRunCount(), result.getFailureCount());
+         
+         System.out.printf("Test ran: %s, Failed: %s%n",result.getRunCount(), result.getFailureCount());*/
+         ett = new EdgeTableTest(DEFAULT_VALUE);
           
       }
       else if(args[0].equals("-h")) {

@@ -2,6 +2,7 @@ import static org.junit.Assert.*;
 import static org.junit.Assert.assertEquals;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.After;
 /**
 nov 10 2017
 */
@@ -9,12 +10,21 @@ nov 10 2017
 public class EdgeTableTest {
 
    EdgeTable testObj;
+   public int testsrun = 0;
+   public int testsfail = 0;
+   
+   public EdgeTableTest(String value) {
+      testObj = new EdgeTable("1|student");
+      runner();
+      displayResults();
+   
+   }
          
-   @Before
+   /*@Before
    public void setUp() throws Exception {
       testObj = new EdgeTable("1|student");
-      //runner();
-   }
+      runner();
+   }*/
    
    public void runner() {
         
@@ -25,13 +35,33 @@ public class EdgeTableTest {
    
    @Test
    public void testGetNumFigure() {
+      testsrun++;
       System.out.println("getNumFigure is running!");
-      assertEquals("testGetNum was intialized to 1 so it should be 1",1,testObj.getNumFigure());      
+      try {
+         assertEquals("testGetNum was intialized to 1 so it should be 1",2,testObj.getNumFigure());
+      } catch (AssertionError e) {
+         System.out.println("Error testGetNumFigure");
+         testsfail++;
+      }
+   
    }
 
    @Test
    public void testGetName() {
-     System.out.println("testGetName is running!");
-     assertEquals("testGetName was intialized to student so it should be student","student",testObj.getName());
+      testsrun++;
+      System.out.println("testGetName is running!");
+      try {
+         assertEquals("testGetName was intialized to student so it should be student","student",testObj.getName());
+      } catch (AssertionError e) {
+         System.out.println("Error testGetName");
+         testsfail++;
+      }
+   
    }
+   
+   
+   public void displayResults() {
+      System.out.println("Tests run: " + testsrun + " Tests failed: " + testsfail );
+   }
+   
 }
