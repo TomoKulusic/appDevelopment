@@ -21,14 +21,7 @@ public class MainTester {
       String help3 = " -f Is for what follows the name of a test object file";
        
       if(args.length == 0){
-         
-         /*Result result = JUnitCore.runClasses(EdgeTableTest.class);
-      
-         for (Failure failure : result.getFailures()) {
-            System.out.println(failure.toString());
-         }
-         
-         System.out.printf("Test ran: %s, Failed: %s%n",result.getRunCount(), result.getFailureCount());*/
+        
          ett = new EdgeTableTest(DEFAULT_VALUE);
           
       }
@@ -39,7 +32,7 @@ public class MainTester {
       }
       else if(args[0].equals("-n")) {
          command = args[1];
-         //ett = new EdgeTableTest(command);
+         ett = new EdgeTableTest(command);
       }
       else if(args[0].equals("-f")) {
          System.out.println("This is the test object " + args[1]);

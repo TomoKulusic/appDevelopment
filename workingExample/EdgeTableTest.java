@@ -14,7 +14,7 @@ public class EdgeTableTest {
    public int testsfail = 0;
    
    public EdgeTableTest(String value) {
-      testObj = new EdgeTable("1|student");
+      testObj = new EdgeTable(value);
       runner();
       displayResults();
    
@@ -38,9 +38,9 @@ public class EdgeTableTest {
       testsrun++;
       System.out.println("getNumFigure is running!");
       try {
-         assertEquals("testGetNum was intialized to 1 so it should be 1",2,testObj.getNumFigure());
+         assertEquals(1,testObj.getNumFigure());
       } catch (AssertionError e) {
-         System.out.println("Error testGetNumFigure");
+         System.out.println("testGetNum was intialized to " + testObj.getNumFigure() + " ,it should be 1");
          testsfail++;
       }
    
@@ -51,9 +51,9 @@ public class EdgeTableTest {
       testsrun++;
       System.out.println("testGetName is running!");
       try {
-         assertEquals("testGetName was intialized to student so it should be student","student",testObj.getName());
+         assertEquals("student",testObj.getName());
       } catch (AssertionError e) {
-         System.out.println("Error testGetName");
+         System.out.println("testGetName was intialized to " + testObj.getName() + " so it should be student");
          testsfail++;
       }
    
