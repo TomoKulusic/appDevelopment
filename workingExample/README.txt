@@ -1,5 +1,12 @@
-Milestone 03 - Deployment Stategy
+Milestone 03 - Deployment Strategy
 
-1). First run the main application by double clicking on the milestone3.jar 
-2). Second to run the test please run the milestone3Test.jar
+1). To run the main application double click on milestone3.jar 
+2). To run the test please run the milestone3test.jar
+
+
+Github Link:
+https://github.com/TomoKulusic/appDevelopment/tree/master/workingExample
+
+
+
 
