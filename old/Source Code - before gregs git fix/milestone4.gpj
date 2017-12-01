@@ -1,5 +1,5 @@
 !1157;s
-J
+A
 SAU0PATH+=%<JGRASP_PATHS>%;\012PATH=+%;%<JGRASP_C_PATHS>\012CYGWIN=nodosfilewarning\012-Run\012ADD_EXE_PATH==Y\012
 SCU0PATH+=%<JGRASP_PATHS>%;\012PATH=+%;%<JGRASP_C_PATHS>\012CYGWIN=nodosfilewarning\012-Run\012ADD_EXE_PATH==Y\012
 S+U0PATH+=%<JGRASP_PATHS>%;\012PATH=+%;%<JGRASP_C_PATHS>\012CYGWIN=nodosfilewarning\012-Run\012ADD_EXE_PATH==Y\012
@@ -11,8 +11,8 @@ s#i0
 s#k0
 s#j0
 s#l0
-!110;u
-a0	b68	c255	f%\011milestone4.jar	g%\011milestone4.zip	hManifest-Version\0111.0\011Main-Class\011RunEdgeConvert!328;g
+!78;u
+a0	b68	c255	f%\011milestone4.jar	g%\011milestone4.zip	hManifest-Version\0111.0!328;g
 %\011EdgeField.java
 %\011EdgeConnector.java
 %\011ExampleFileFilter.java
