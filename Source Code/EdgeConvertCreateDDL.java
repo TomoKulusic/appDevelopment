@@ -38,6 +38,11 @@ public abstract class EdgeConvertCreateDDL {
             }
          }
          numBoundTables[i] = numBound;
+         
+       //  System.out.println(tables.length);
+       //  System.out.println(fields.length);
+         
+         
          if (numBound > maxBound) {
             maxBound = numBound;
          }
