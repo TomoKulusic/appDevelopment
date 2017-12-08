@@ -69,10 +69,10 @@ public class EdgeConvertGUI {
    static JMenuItem jmiDROpenEdge, jmiDROpenSave, jmiDRSave, jmiDRSaveAs, jmiDRExit, jmiDROptionsOutputLocation, jmiDROptionsShowProducts, jmiDRHelpAbout;
    
    public EdgeConvertGUI() {
+      // System.out.println(jrbDataType.length+"");
       menuListener = new EdgeMenuListener();
-      radioListener = new EdgeRadioButtonListener();
-      edgeWindowListener = new EdgeWindowListener();
-      createDDLListener = new CreateDDLButtonListener(outputDir);
+           edgeWindowListener = new EdgeWindowListener();
+      createDDLListener = new CreateDDLButtonListener();
       this.showGUI();
    } // EdgeConvertGUI.EdgeConvertGUI()
    
@@ -85,6 +85,8 @@ public class EdgeConvertGUI {
       }
       createDTScreen();
       createDRScreen();
+      radioListener = new EdgeRadioButtonListener( jrbDataType, currentDTField, jbDTVarchar, jtfDTDefaultValue);
+      
    } //showGUI()
 
    public void createDTScreen() {//create Define Tables screen
@@ -1140,7 +1142,7 @@ public class EdgeConvertGUI {
          }
       }
    }
-   
+ /*  
    class EdgeRadioButtonListener implements ActionListener {
       public void actionPerformed(ActionEvent ae) {
          for (int i = 0; i < jrbDataType.length; i++) {
@@ -1162,6 +1164,7 @@ public class EdgeConvertGUI {
          dataSaved = false;
       }
    }
+   */
       /*
    class EdgeWindowListener implements WindowListener {
       public void windowActivated(WindowEvent we) {}
@@ -1200,7 +1203,7 @@ public class EdgeConvertGUI {
    }
    */
    
-   /*
+   
    class CreateDDLButtonListener implements ActionListener {
       public void actionPerformed(ActionEvent ae) {
          while (outputDir == null) {
@@ -1214,10 +1217,10 @@ public class EdgeConvertGUI {
          }
          writeSQL(sqlString);
       }
-   }*/
+   }
 
 
-   /*
+   
    class EdgeMenuListener implements ActionListener {
       public void actionPerformed(ActionEvent ae) {
          int returnVal;
@@ -1343,7 +1346,7 @@ public class EdgeConvertGUI {
          }
       } // EdgeMenuListener.actionPerformed()
    
-   } // EdgeMenuListener    */
+   } // EdgeMenuListener    
 
 
 } // EdgeConvertGUI

@@ -12,9 +12,10 @@ public class CreateDDLButtonListener implements ActionListener {
    private File parseFile, saveFile, outputFile, outputDir, outputDirOld;
    EdgeConvertGUI gui;
    String sqlString;
-   public CreateDDLButtonListener(File _outputDir){
+   public CreateDDLButtonListener(File _outputDir,String _sqlString){
    
       this.outputDir = outputDir;
+      this.sqlString = sqlString;
    
    }
    
@@ -22,7 +23,7 @@ public class CreateDDLButtonListener implements ActionListener {
    public void actionPerformed(ActionEvent ae) {
       while (outputDir == null) {
          JOptionPane.showMessageDialog(null, "You have not selected a path that contains valid output definition files yet.\nPlease select a path now.");
-         //gui.setOutputDir(outputDir);
+         gui.setOutputDir(outputDir);
       }
       gui.getOutputClasses(); //in case outputDir was set before a file was loaded and EdgeTable/EdgeField objects created
       sqlString = gui.getSQLStatements();
