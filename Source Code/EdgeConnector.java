@@ -20,13 +20,13 @@ public class EdgeConnector {
       isEP2Table = false;
       
       
-    }
+   }
    
    public int getNumConnector() {
    
       return numConnector;
       
-        }
+   }
    
    public int getEndPoint1() {
       return endPoint1;
@@ -61,7 +61,7 @@ public class EdgeConnector {
 
    public void setIsEP1Field(boolean value) {
       isEP1Field = value;
-        }
+   }
    
    public void setIsEP2Field(boolean value) {
       isEP2Field = value;

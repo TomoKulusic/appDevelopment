@@ -9,10 +9,10 @@ import java.lang.reflect.*;
 
 public class EdgeWindowListener implements WindowListener {
 
-    public boolean dataSaved = true;
-    public JFrame jfDT, jfDR;
-    public  File parseFile, saveFile, outputFile, outputDir, outputDirOld;
-    EdgeConvertGUI gui;
+   public boolean dataSaved = true;
+   public JFrame jfDT, jfDR;
+   public  File parseFile, saveFile, outputFile, outputDir, outputDirOld;
+   EdgeConvertGUI gui;
 
    public EdgeWindowListener(){
    

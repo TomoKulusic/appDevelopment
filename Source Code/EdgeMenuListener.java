@@ -8,27 +8,68 @@ import java.util.*;
 import java.lang.reflect.*;
 
 public class EdgeMenuListener implements ActionListener {
- 
+   public static final int HORIZ_SIZE = 635;
+   public static final int VERT_SIZE = 400;
+   public static final int HORIZ_LOC = 100;
+   public static final int VERT_LOC = 100;
+   public static final String DEFINE_TABLES = "Define Tables";
+   public static final String DEFINE_RELATIONS = "Define Relations";
+   public static final String CANCELLED = "CANCELLED";
+   private static JFileChooser jfcEdge, jfcGetClass, jfcOutputDir;
+   private static ExampleFileFilter effEdge, effSave, effClass;
+   private File parseFile, saveFile, outputFile, outputDir, outputDirOld;
+   private String truncatedFilename;
+   private String sqlString;
+   private String databaseName;
 
-  
-  
-   public JMenuItem jmiDTOpenEdge, jmiDTOpenSave, jmiDTSave, jmiDTSaveAs, jmiDTExit, jmiDTOptionsOutputLocation, jmiDTOptionsShowProducts, jmiDTHelpAbout;
-   public JMenuItem jmiDROpenEdge, jmiDROpenSave, jmiDRSave, jmiDRSaveAs, jmiDRExit, jmiDROptionsOutputLocation, jmiDROptionsShowProducts, jmiDRHelpAbout;
+   private EdgeConvertFileParser ecfp;
+   private EdgeConvertCreateDDL eccd;
+   private static PrintWriter pw;
+   private EdgeTable[] tables; //master copy of EdgeTable objects
+   private EdgeField[] fields; //master copy of EdgeField objects
+   private EdgeTable currentDTTable, currentDRTable1, currentDRTable2; //pointers to currently selected table(s) on Define Tables (DT) and Define Relations (DR) screens
+   private EdgeField currentDTField, currentDRField1, currentDRField2; //pointers to currently selected field(s) on Define Tables (DT) and Define Relations (DR) screens
+   private static boolean readSuccess = true; //this tells GUI whether to populate JList components or not
+   private boolean dataSaved = true;
+   private ArrayList alSubclasses, alProductNames;
+   private String[] productNames;
+   private Object[] objSubclasses;
+
+   //Define Tables screen objects
+   static JFrame jfDT;
+   static JPanel jpDTBottom, jpDTCenter, jpDTCenter1, jpDTCenter2, jpDTCenterRight, jpDTCenterRight1, jpDTCenterRight2, jpDTMove;
+   static JButton jbDTCreateDDL, jbDTDefineRelations, jbDTVarchar, jbDTDefaultValue, jbDTMoveUp, jbDTMoveDown;
+   static ButtonGroup bgDTDataType;
+   static JRadioButton[] jrbDataType;
+   static String[] strDataType;
+   static JCheckBox jcheckDTDisallowNull, jcheckDTPrimaryKey;
+   static JTextField jtfDTVarchar, jtfDTDefaultValue;
+   static JLabel jlabDTTables, jlabDTFields;
+   static JScrollPane jspDTTablesAll, jspDTFieldsTablesAll;
+   static JList jlDTTablesAll, jlDTFieldsTablesAll;
+   static DefaultListModel dlmDTTablesAll, dlmDTFieldsTablesAll;
+   static JMenuBar jmbDTMenuBar;
+   static JMenu jmDTFile, jmDTOptions, jmDTHelp;
+   static JMenuItem jmiDTOpenEdge, jmiDTOpenSave, jmiDTSave, jmiDTSaveAs, jmiDTExit, jmiDTOptionsOutputLocation, jmiDTOptionsShowProducts, jmiDTHelpAbout;
    
-   public EdgeTable[] tables; //master copy of EdgeTable objects
-   public EdgeField[] fields; //master copy of EdgeField objects
+   //Define Relations screen objects
+   static JFrame jfDR;
+   static JPanel jpDRBottom, jpDRCenter, jpDRCenter1, jpDRCenter2, jpDRCenter3, jpDRCenter4;
+   static JButton jbDRCreateDDL, jbDRDefineTables, jbDRBindRelation;
+   static JList jlDRTablesRelations, jlDRTablesRelatedTo, jlDRFieldsTablesRelations, jlDRFieldsTablesRelatedTo;
+   static DefaultListModel dlmDRTablesRelations, dlmDRTablesRelatedTo, dlmDRFieldsTablesRelations, dlmDRFieldsTablesRelatedTo;
+   static JLabel jlabDRTablesRelations, jlabDRTablesRelatedTo, jlabDRFieldsTablesRelations, jlabDRFieldsTablesRelatedTo;
+   static JScrollPane jspDRTablesRelations, jspDRTablesRelatedTo, jspDRFieldsTablesRelations, jspDRFieldsTablesRelatedTo;
+   static JMenuBar jmbDRMenuBar;
+   static JMenu jmDRFile, jmDROptions, jmDRHelp;
+   static JMenuItem jmiDROpenEdge, jmiDROpenSave, jmiDRSave, jmiDRSaveAs, jmiDRExit, jmiDROptionsOutputLocation, jmiDROptionsShowProducts, jmiDRHelpAbout;
 
+   EdgeConvertGUI gui;
+  
+     
 
      
-   public boolean dataSaved = true;
-
-
-   public JFileChooser jfcEdge;
- 
-   public EdgeConvertFileParser ecfp;
-
-  public ExampleFileFilter effEdge, effSave, effClass;
-
+    
    public EdgeMenuListener(){
    
    
@@ -61,7 +102,7 @@ public class EdgeMenuListener implements ActionListener {
             }
             fields = ecfp.getEdgeFields();
             ecfp = null;
-            populateLists();
+            gui.populateLists();
             saveFile = null;
             jmiDTSave.setEnabled(false);
             jmiDRSave.setEnabled(false);
@@ -98,7 +139,7 @@ public class EdgeMenuListener implements ActionListener {
             tables = ecfp.getEdgeTables();
             fields = ecfp.getEdgeFields();
             ecfp = null;
-            populateLists();
+            gui.populateLists();
             parseFile = null;
             jmiDTSave.setEnabled(true);
             jmiDRSave.setEnabled(true);
@@ -122,10 +163,10 @@ public class EdgeMenuListener implements ActionListener {
       if ((ae.getSource() == jmiDTSaveAs) || (ae.getSource() == jmiDRSaveAs) ||
           (ae.getSource() == jmiDTSave) || (ae.getSource() == jmiDRSave)) {
          if ((ae.getSource() == jmiDTSaveAs) || (ae.getSource() == jmiDRSaveAs)) {
-            saveAs();
+            gui.saveAs();
          } 
          else {
-            writeSave();
+            gui.writeSave();
          }
       }
       
@@ -139,7 +180,7 @@ public class EdgeMenuListener implements ActionListener {
                 null, null, null);
             if (answer == JOptionPane.YES_OPTION) {
                if (saveFile == null) {
-                  saveAs();
+                  gui.saveAs();
                }
             }
             if ((answer == JOptionPane.CANCEL_OPTION) || (answer == JOptionPane.CLOSED_OPTION)) {
@@ -150,17 +191,17 @@ public class EdgeMenuListener implements ActionListener {
       }
       
       if ((ae.getSource() == jmiDTOptionsOutputLocation) || (ae.getSource() == jmiDROptionsOutputLocation)) {
-         setOutputDir();
+         gui.setOutputDir();
       }
    
       if ((ae.getSource() == jmiDTOptionsShowProducts) || (ae.getSource() == jmiDROptionsShowProducts)) {
-         JOptionPane.showMessageDialog(null, "The available products to create DDL statements are:\n" + displayProductNames());
+         JOptionPane.showMessageDialog(null, "The available products to create DDL statements are:\n" + gui.displayProductNames());
       }
       
       if ((ae.getSource() == jmiDTHelpAbout) || (ae.getSource() == jmiDRHelpAbout)) {
          JOptionPane.showMessageDialog(null, "EdgeConvert ERD To DDL Conversion Tool\n" +
                                              "by Stephen A. Capperell\n" +
-                                             "© 2007-2008");
+                                             "2007-2008");
       }
-   } // EdgeMenuListener.actionPerformed()
+   } // EdgeMenuListener.actionPerformed() 
 } // EdgeMenuListener
