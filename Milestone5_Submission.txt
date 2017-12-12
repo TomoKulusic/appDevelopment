@@ -1,8 +1,8 @@
-Milestone 5 - 
+Milestone 5 Submission Links:
 
 Jar File - https://github.com/TomoKulusic/appDevelopment/tree/master/Source_Code/AAA-JAR_File_For_Entire_Application
-Writeup - 
-Code Base - 
+Writeup - https://github.com/TomoKulusic/appDevelopment/blob/master/Milestone_5_Writeup.md
+Code Base - https://github.com/TomoKulusic/appDevelopment/tree/master/Source_Code
 
 
 
