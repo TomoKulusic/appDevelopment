@@ -6,8 +6,6 @@ public class EdgeConnector {
    private boolean isEP1Field, isEP2Field, isEP1Table, isEP2Table;
       
    public EdgeConnector(String inputString) {
-   
-     // System.out.println(inputString);
       StringTokenizer st = new StringTokenizer(inputString, EdgeConvertFileParser.DELIM);
       numConnector = Integer.parseInt(st.nextToken());
       endPoint1 = Integer.parseInt(st.nextToken());
@@ -18,14 +16,10 @@ public class EdgeConnector {
       isEP2Field = false;
       isEP1Table = false;
       isEP2Table = false;
-      
-      
    }
    
    public int getNumConnector() {
-   
       return numConnector;
-      
    }
    
    public int getEndPoint1() {

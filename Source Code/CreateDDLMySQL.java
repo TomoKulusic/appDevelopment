@@ -25,7 +25,14 @@ public class CreateDDLMySQL extends EdgeConvertCreateDDL {
    public CreateDDLMySQL() { //default constructor with empty arg list for to allow output dir to be set before there are table and field objects
       
    }
-
+   
+   public void loopEnd(int end){
+   
+   
+   
+   
+   
+   }
    
    public void createDDL() {
       EdgeConvertGUI.setReadSuccess(true);
@@ -68,9 +75,6 @@ public class CreateDDLMySQL extends EdgeConvertCreateDDL {
                   if (currentField.getFieldBound() != 0) {
                      numForeignKey++;
                   }
-                
-                
-                //Corrects the sql
                   
                   int endCount = nativeFields.length -1;
                   

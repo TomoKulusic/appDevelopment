@@ -54,7 +54,7 @@ public class EdgeConvertGUI {
    static DefaultListModel dlmDTTablesAll, dlmDTFieldsTablesAll;
    static JMenuBar jmbDTMenuBar;
    static JMenu jmDTFile, jmDTOptions, jmDTHelp;
-   static JMenuItem jmiDTOpenEdge, jmiDTOpenSave, jmiDTSave, jmiDTSaveAs, jmiDTExit, jmiDTOptionsOutputLocation, jmiDTOptionsShowProducts, jmiDTHelpAbout , jmiDTHelpMore;
+   static JMenuItem jmiDTOpenEdge, jmiDTOpenSave, jmiDTSave, jmiDTSaveAs, jmiDTExit, jmiDTOptionsOutputLocation, jmiDTOptionsShowProducts, jmiDTHelpAbout, jmiDTHelpAbout2;
    
    //Define Relations screen objects
    static JFrame jfDR;
@@ -66,13 +66,13 @@ public class EdgeConvertGUI {
    static JScrollPane jspDRTablesRelations, jspDRTablesRelatedTo, jspDRFieldsTablesRelations, jspDRFieldsTablesRelatedTo;
    static JMenuBar jmbDRMenuBar;
    static JMenu jmDRFile, jmDROptions, jmDRHelp;
-   static JMenuItem jmiDROpenEdge, jmiDROpenSave, jmiDRSave, jmiDRSaveAs, jmiDRExit, jmiDROptionsOutputLocation, jmiDROptionsShowProducts, jmiDRHelpAbout;
+   static JMenuItem jmiDROpenEdge, jmiDROpenSave, jmiDRSave, jmiDRSaveAs, jmiDRExit, jmiDROptionsOutputLocation, jmiDROptionsShowProducts, jmiDRHelpAbout, jmiDRHelpAbout2;
    
    public EdgeConvertGUI() {
       menuListener = new EdgeMenuListener();
-      radioListener = new EdgeRadioButtonListener();
       edgeWindowListener = new EdgeWindowListener();
       createDDLListener = new CreateDDLButtonListener();
+      radioListener = new EdgeRadioButtonListener();
       this.showGUI();
    } // EdgeConvertGUI.EdgeConvertGUI()
    
@@ -85,6 +85,7 @@ public class EdgeConvertGUI {
       }
       createDTScreen();
       createDRScreen();
+     
    } //showGUI()
 
    public void createDTScreen() {//create Define Tables screen
@@ -146,14 +147,12 @@ public class EdgeConvertGUI {
       jmiDTHelpAbout = new JMenuItem("About");
       jmiDTHelpAbout.setMnemonic(KeyEvent.VK_A);
       jmiDTHelpAbout.addActionListener(menuListener);
-      jmiDTHelpMore = new JMenuItem("Help System");
-      jmiDTHelpMore.setMnemonic(KeyEvent.VK_B);
-      jmiDTHelpMore.addActionListener(menuListener);
-   
       jmDTHelp.add(jmiDTHelpAbout);
-      jmDTHelp.add(jmiDTHelpMore);
+      jmiDTHelpAbout2 = new JMenuItem("Help System");
+      jmiDTHelpAbout2.setMnemonic(KeyEvent.VK_B);
+      jmiDTHelpAbout2.addActionListener(menuListener);
+      jmDTHelp.add(jmiDTHelpAbout2);
    
-      
       
       jfcEdge = new JFileChooser();
       jfcOutputDir = new JFileChooser();
@@ -547,6 +546,11 @@ public class EdgeConvertGUI {
       jmiDRHelpAbout.setMnemonic(KeyEvent.VK_A);
       jmiDRHelpAbout.addActionListener(menuListener);
       jmDRHelp.add(jmiDRHelpAbout);
+      jmiDRHelpAbout2 = new JMenuItem("Help System");
+      jmiDRHelpAbout2.setMnemonic(KeyEvent.VK_B);
+      jmiDRHelpAbout2.addActionListener(menuListener);
+      jmDRHelp.add(jmiDRHelpAbout2);
+   
    
       jpDRCenter = new JPanel(new GridLayout(2, 2));
       jpDRCenter1 = new JPanel(new BorderLayout());
@@ -867,7 +871,7 @@ public class EdgeConvertGUI {
       dlmDRFieldsTablesRelatedTo.clear();
    }
    
-   private void populateLists() {
+   public void populateLists() {
       if (readSuccess) {
          jfDT.setVisible(true);
          jfDR.setVisible(false);
@@ -939,7 +943,40 @@ public class EdgeConvertGUI {
       }
    }
 
-   private void setOutputDir() {
+   public void setOutputDir(File outputDir) {
+      int returnVal;
+      outputDirOld = outputDir;
+      alSubclasses = new ArrayList();
+      alProductNames = new ArrayList();
+   
+      returnVal = jfcOutputDir.showOpenDialog(null);
+      
+      if (returnVal == JFileChooser.CANCEL_OPTION) {
+         return;
+      }
+   
+      if (returnVal == JFileChooser.APPROVE_OPTION) {
+         outputDir = jfcOutputDir.getSelectedFile();
+      }
+      
+      getOutputClasses();
+   
+      if (alProductNames.size() == 0) {
+         JOptionPane.showMessageDialog(null, "The path:\n" + outputDir + "\ncontains no valid output definition files.");
+         outputDir = outputDirOld;
+         return;
+      }
+      
+      if ((parseFile != null || saveFile != null) && outputDir != null) {
+         jbDTCreateDDL.setEnabled(true);
+         jbDRCreateDDL.setEnabled(true);
+      }
+   
+      JOptionPane.showMessageDialog(null, "The available products to create DDL statements are:\n" + displayProductNames());
+      jmiDTOptionsShowProducts.setEnabled(true);
+      jmiDROptionsShowProducts.setEnabled(true);
+   }
+   public void setOutputDir() {
       int returnVal;
       outputDirOld = outputDir;
       alSubclasses = new ArrayList();
@@ -973,7 +1010,8 @@ public class EdgeConvertGUI {
       jmiDROptionsShowProducts.setEnabled(true);
    }
    
-   private String displayProductNames() {
+
+   public String displayProductNames() {
       StringBuffer sb = new StringBuffer();
       for (int i = 0; i < productNames.length; i++) {
          sb.append(productNames[i] + "\n");
@@ -981,7 +1019,7 @@ public class EdgeConvertGUI {
       return sb.toString();
    }
    
-   private void getOutputClasses() {
+   public void getOutputClasses() {
       File[] resultFiles;
       Class resultClass = null;
       Class[] paramTypes = {EdgeTable[].class, EdgeField[].class};
@@ -1008,19 +1046,18 @@ public class EdgeConvertGUI {
                   conResultClass = resultClass.getConstructor(paramTypes);
                   objOutput = conResultClass.newInstance(args);
                }
-               alSubclasses.add(objOutput);
-               Method getProductName = resultClass.getMethod("getProductName" );
                try{
-                  String productName = (String)getProductName.invoke(objOutput );
+                  alSubclasses.add(objOutput);
+                  Method getProductName = resultClass.getMethod("getProductName");
+                  String productName = (String)getProductName.invoke(objOutput);
                   alProductNames.add(productName);
+               }
+               catch(Exception e){
+               
+                  JOptionPane.showMessageDialog(null, " Pick a different path!" );
                
                }
-               catch(Exception e)
-               {
-                  JOptionPane.showMessageDialog(null, "Bad directory" + displayProductNames());
                
-               
-               }
             }
          }
       } 
@@ -1045,7 +1082,7 @@ public class EdgeConvertGUI {
       }
    }
    
-   private String getSQLStatements() {
+   public String getSQLStatements() {
       String strSQLString = "";
       String response = (String)JOptionPane.showInputDialog(
                     null,
@@ -1087,7 +1124,7 @@ public class EdgeConvertGUI {
       return strSQLString;
    }
 
-   private void writeSQL(String output) {
+   public void writeSQL(String output) {
       jfcEdge.resetChoosableFileFilters();
       String str;
       if (parseFile != null) {
@@ -1145,7 +1182,7 @@ public class EdgeConvertGUI {
       }
    }
    
-
+  
    class CreateDDLButtonListener implements ActionListener {
       public void actionPerformed(ActionEvent ae) {
          while (outputDir == null) {
@@ -1161,6 +1198,8 @@ public class EdgeConvertGUI {
       }
    }
 
+
+   
    class EdgeMenuListener implements ActionListener {
       public void actionPerformed(ActionEvent ae) {
          int returnVal;
@@ -1282,14 +1321,19 @@ public class EdgeConvertGUI {
          if ((ae.getSource() == jmiDTHelpAbout) || (ae.getSource() == jmiDRHelpAbout)) {
             JOptionPane.showMessageDialog(null, "EdgeConvert ERD To DDL Conversion Tool\n" +
                                                 "by Stephen A. Capperell\n" +
-                                                "2007-2008");
+                                                " 2007-2008");
          }
-         if ((ae.getSource() == jmiDTHelpMore)) {
-           
-            HelpSystem helpsystem = new HelpSystem();
-            helpsystem.main();           
+         if ((ae.getSource() == jmiDTHelpAbout2)) {
+          
+            HelpSystem hp = new HelpSystem();
+           hp.main()
          }
+        
+      
       
       } // EdgeMenuListener.actionPerformed()
-   } // EdgeMenuListener
+   
+   } // EdgeMenuListener    
+
+
 } // EdgeConvertGUI

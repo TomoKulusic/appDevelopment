@@ -7,8 +7,7 @@ public class EdgeTable {
    private int[] relatedTables, relatedFields, nativeFields;
    
    public EdgeTable(String inputString) {
-     // System.out.println(inputString);
-      StringTokenizer st = new StringTokenizer(inputString, EdgeConvertFileParser.DELIM);
+      StringTokenizer st = new StringTokenizer(inputString,"|");
       numFigure = Integer.parseInt(st.nextToken());
       name = st.nextToken();
       alRelatedTables = new ArrayList();
@@ -100,21 +99,21 @@ public class EdgeTable {
       for (int i = 0; i < nativeFields.length; i++) {
          sb.append(nativeFields[i]);
          if (i < (nativeFields.length - 1)){
-            sb.append("|");
+            sb.append(EdgeConvertFileParser.DELIM);
          }
       }
       sb.append("\r\nRelatedTables: ");
       for (int i = 0; i < relatedTables.length; i++) {
          sb.append(relatedTables[i]);
          if (i < (relatedTables.length - 1)){
-            sb.append("|");
+            sb.append(EdgeConvertFileParser.DELIM);
          }
       }
       sb.append("\r\nRelatedFields: ");
       for (int i = 0; i < relatedFields.length; i++) {
          sb.append(relatedFields[i]);
          if (i < (relatedFields.length - 1)){
-            sb.append("|");
+            sb.append(EdgeConvertFileParser.DELIM);
          }
       }
       sb.append("\r\n}\r\n");
